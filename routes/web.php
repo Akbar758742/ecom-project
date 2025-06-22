@@ -42,5 +42,6 @@ Route::get('product_details/{id} ', [HomeController::class, 'product_details']);
 Route::get('add_to_cart/{id} ', [HomeController::class, 'add_to_cart'])->middleware(['auth', 'verified']);
 Route::get('show_cart', [HomeController::class, 'show_cart']);
 Route::get('remove_cart/{id} ', [HomeController::class, 'remove_cart']);
+Route::post('place_order', [HomeController::class, 'place_order']);
 
 

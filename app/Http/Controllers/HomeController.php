@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Cart;
 use App\Models\user;
+use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
@@ -85,6 +86,7 @@ class HomeController extends Controller
         else
         {
             $count=0;
+            $cart = collect();
         }
 
 
@@ -95,6 +97,40 @@ class HomeController extends Controller
         $cart=Cart::find($id);
         $cart->delete();
         return redirect()->back();
+    }
+
+    public function place_order( Request $request){
+
+        $user_id=Auth::user()->id;
+        $name=$request->name;
+        $phone=$request->phone;
+        $address=$request->address;
+
+        $cart=Cart::where('user_id',$user_id)->get();
+        foreach($cart as $cart){
+            $order=new Order();
+            $order->name=$name;
+            $order->phone=$phone;
+            $order->address=$address;
+            $order->user_id=$user_id;
+            $order->product_id=$cart->product_id;
+
+            // $order->payment_status='pending';
+            // $order->delivery_status='pending';
+            $order->save();
+        }
+        $remove_cart=Cart::where('user_id',$user_id)->get();
+        // foreach($cart as $cart){
+        //     $cart->delete();
+        // }
+
+        foreach($remove_cart as $remove){
+          $data=Cart::find($remove->id);
+          $data->delete();
+        }
+         toastr()->timeout(2000)->success('Product Order Placed Successfully');
+        return redirect()->back();
+
     }
 
 }
