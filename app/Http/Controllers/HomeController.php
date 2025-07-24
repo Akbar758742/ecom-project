@@ -114,6 +114,7 @@ class HomeController extends Controller
             $order->address=$address;
             $order->user_id=$user_id;
             $order->product_id=$cart->product_id;
+            //hiiii
 
             // $order->payment_status='pending';
             // $order->delivery_status='pending';
